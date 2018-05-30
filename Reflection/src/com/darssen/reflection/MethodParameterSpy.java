@@ -35,6 +35,8 @@ package com.darssen.reflection;
  * and methods of a given class. The example also prints other information about each parameter.
  * 
  * Samples of how to call (Basically needs the class to inspect as argument)
+ * 
+ * 		java MethodParameterSpy java.lang.Number
  */ 
 
 import java.lang.reflect.*;

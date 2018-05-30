@@ -1,11 +1,17 @@
 package com.darssen.reflection;
 
+/* Copied from MethodSpy.java, but shows all methods in a class
+ * 
+ * Samples of how to call (Basically needs the class to inspect as argument)
+ * 		java MethodSpy java.lang.Class
+ * */
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import static java.lang.System.out;
 
 import java.beans.Transient;
 import java.lang.annotation.Annotation;
+
 
 public class MethodSpyAll {
     private static final String  fmt = "%24s: %s%n";
