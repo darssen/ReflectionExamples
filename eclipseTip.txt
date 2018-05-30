@@ -1,0 +1,2 @@
+Add following line to the config args so that it prompts it when running in Eclipse.
+${string_prompt:Args}
