@@ -29,49 +29,45 @@ package com.darssen.reflection;
  * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+ * 
+ * 
+ * The ArrayFind example identifies the fields in the named class that are of array type 
+ * and reports the component type for each of them.
+ * 
+ * Samples of how to call (Basically needs the class to inspect as argument)
+ * 
+ * 		java ArrayFind java.nio.ByteBuffer
+ * 		java ArrayFind java.lang.Throwable
+ */ 
+	
+
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.lang.reflect.Type;
 import static java.lang.System.out;
 
-enum Tweedle { DEE, DUM }
-
-public class Book {
-	//public long chapters = 0;
-    public Long chapters = 0L;
-    public String[] characters = { "Alice", "White Rabbit" };
-    public Tweedle twin = Tweedle.DEE;
-
+public class ArrayFind {
     public static void main(String... args) {
-	Book book = new Book();
-	String fmt = "%6S:  %-12s = %s%n";
+	boolean found = false;
+ 	try {
+	    Class<?> cls = Class.forName(args[0]);
+	    Field[] flds = cls.getDeclaredFields();
+	    for (Field f : flds) {
+ 		Class<?> c = f.getType();
+		if (c.isArray()) {
+		    found = true;
+		    out.format("%s%n"
+                               + "           Field: %s%n"
+			       + "            Type: %s%n"
+			       + "  Component Type: %s%n",
+			       f, f.getName(), c, c.getComponentType());
+		}
+	    }
+	    if (!found) {
+		out.format("No array fields%n");
+	    }
 
-	try {
-	    Class<?> c = book.getClass();
-
-	    Field chap = c.getDeclaredField("chapters");
-	    out.format(fmt, "before", "chapters", book.chapters);
-	    //chap.setLong(book,12);
-  	    chap.set(book, new Long(12));
-	    out.format(fmt, "after", "chapters", book.chapters);
-
-	    Field chars = c.getDeclaredField("characters");
-	    out.format(fmt, "before", "characters",
-		       Arrays.asList(book.characters));
-	    String[] newChars = { "Queen", "King" };
-	    chars.set(book, newChars);
-	    out.format(fmt, "after", "characters",
-		       Arrays.asList(book.characters));
-
-	    Field t = c.getDeclaredField("twin");
-	    out.format(fmt, "before", "twin", book.twin);
-	    t.set(book, Tweedle.DUM);
-	    out.format(fmt, "after", "twin", t.get(book));
-
-        // production code should handle these exceptions more gracefully
-	} catch (NoSuchFieldException x) {
-	    x.printStackTrace();
-	} catch (IllegalAccessException x) {
+        // production code should handle this exception more gracefully
+ 	} catch (ClassNotFoundException x) {
 	    x.printStackTrace();
 	}
     }
